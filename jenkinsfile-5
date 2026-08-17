@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                echo 'Git Clone'
+                git branch: 'main', 
+                credentialsId: 'A11', 
+                url: 'https://github.com/porchelvan33/Demo-sonar.git'
+            }
+        }
+        stage('Code Coverage') {
+            steps {
+                sh 'echo "This is sonarqube task perfect"'
+            }
+        }
+        stage('Sonarqube Analysis') {
+            steps {
+                script {
+                    def scannerhome = tool name: 'sonar-scanner' , type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                    
+                withCredentials([string(credentialsId: 'c1', variable: 'SONAR_TOKEN')]) {
+                    sh """
+                            ${scannerhome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=sonar-demo-token \
+                            -Dsonar.sources=app.js \
+                            -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.login=$SONAR_TOKEN
+                       """
+                    }
+                
+                } 
+            }
+        }
+          
+    }
+}    
