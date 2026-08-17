@@ -24,7 +24,7 @@ pipeline {
                     sh """
                             ${scannerhome}/bin/sonar-scanner \
                             -Dsonar.projectKey=sonar-demo-token \
-                            -Dsonar.sources=app.js \
+                            -Dsonar.sources=app.js \ package.json
                             -Dsonar.host.url=http://localhost:9000 \
                             -Dsonar.token=\$SONAR_TOKEN
                             
